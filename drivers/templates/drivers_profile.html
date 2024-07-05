@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'drivers.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="navbar-brand">
+                <img src="{% static 'images/logo.jpg' %}" alt="TaxiService Logo">
+                <span class="brand-text">NextGen TaxiServices</span>
+            </a>
+            <button class="navbar-toggler">&#9776;</button>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="{% url 'approved_drivers' %}" class="nav-link">Driver Profile</a></li>
+                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="driver-profile-container">
+        <table class="driver-table">
+            <thead>
+                <tr>
+                    <th>Driver's Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Vehicle Make/Model</th>
+                    <th>Registration Number</th>
+                    <th>Vehicle Photo</th>
+                    <th>Availability</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for driver in approved_drivers %}
+                <tr>
+                    <td>{{ driver.full_name }}</td>
+                    <td>{{ driver.phone }}</td>
+                    <td>{{ driver.email }}</td>
+                    <td>{{ driver.vehicle_make_model }}</td>
+                    <td>{{ driver.registration_number }}</td>
+                    <td><img src="{{ driver.vehicle_photo.url }}" alt="Vehicle Photo" width="100"></td>
+                    <td>
+                        {% if driver.selected %}
+                            <span class="unavailable-message">Unavailable</span>
+                        {% else %}
+                            <form action="{% url 'store_selected_driver' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="driver_id" value="{{ driver.id }}">
+                                <input type="hidden" name="full_name" value="{{ driver.full_name }}">
+                                <input type="hidden" name="phone" value="{{ driver.phone }}">
+                                <input type="hidden" name="email" value="{{ driver.email }}">
+                                <input type="hidden" name="vehicle_make_model" value="{{ driver.vehicle_make_model }}">
+                                <input type="hidden" name="registration_number" value="{{ driver.registration_number }}">
+                                <input type="hidden" name="vehicle_photo" value="{{ driver.vehicle_photo.url }}">
+                                <button type="submit" class="select-seat-btn">Select Taxi</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

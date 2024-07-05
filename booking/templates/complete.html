@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="https://kit.fontawesome.com/742518de6f.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/booking.css' %}">
+    <title>Booking</title>
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand">
+                <img src="{% static 'images/logo.jpg' %}" alt="Logo">
+                <span class="brand-text">NextGen</span>
+            </a>
+            <button class="navbar-toggler" onclick="toggleNav()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="{% url 'services' %}" class="nav-link">Rates and Services</a></li>
+                <li class="nav-item"><a href="#chckin" class="nav-link">Check-In</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event)">Taxi</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'apply' %}" class="dropdown-item">Taxi Driver Application</a></li>
+                    </ul>
+                </li>  
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact Us</a></li>
+            </ul>
+            <a href="{% url 'login' %}"><button class="nav-button">Book a Ticket</button></a>
+        </div>
+    </div>
+</nav>  
+<div class="booking-form">
+    <div class="booking-container">
+        <h2>Book Your Travel Now!</h2>
+        <form id="bookingForm" method="post" action="{% url 'booking' %}">
+            {% csrf_token %}
+            <!-- Passenger Details Section -->
+            <fieldset>
+                <legend>Passenger Details</legend>
+                <div class="form-row" id="adultPassenger">
+                    <div class="form-group">
+                        <label for="adultName">Full Name:</label>
+                        <input type="text" id="adultName" name="adultName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date Of Birth</label>
+                        <input type="date" id="dob" name="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking_email_or_phone">Email or Phone number:</label>
+                        <input type="text" id="booking__email_or_phone" name="booking_email_or_phone" required>
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="addChildTraveler" name="addChildTraveler">
+                    <label for="addChildTraveler">Child Assisted Travelling (For a child travelling alone)</label>
+                </div>
+            </fieldset>
+            <!-- Child-Assisted Travel Section -->
+            <fieldset id="childDetails" style="display: none;">
+                <legend>Child Traveler Details</legend>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="childName">Child's Full Name:</label>
+                        <input type="text" id="childName" name="childName">
+                    </div>
+                    <div class="form-group">
+                        <label for="childAge">Child's DOB:</label>
+                        <input type="date" id="childAge" name="childAge">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="drop">Dropping the child:</label>
+                        <input type="tel" id="drop" name="drop" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="pick">Picking the child:</label>
+                        <input type="tel" id="pick" name="pick" placeholder="Enter phone number">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="specialNeeds">Special Needs/Medical Conditions (optional):</label>
+                        <textarea id="specialNeeds" name="specialNeeds"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+            <!-- Travel Information Section -->
+            <fieldset>
+                <legend>Travel Information</legend>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="travelClass">Travel Class:</label>
+                        <select id="travelClass" name="travelClass">
+                            <option value="" disabled selected>Select</option>
+                            <option value="first">First Class</option>
+                            <option value="economy">Economy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainType">Train Type:</label>
+                        <select id="trainType" name="trainType">
+                            <option value="" disabled selected>Select</option>
+                            <option value="Inter-County">Inter-County</option>
+                            <option value="Afternoon">Afternoon Express</option>
+                            <option value="Night">Night train</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="from">From:</label>
+                        <select name="from" id="from"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="to">To:</label>
+                        <select name="to" id="to"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Departure Date:</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Departure Time:</label>
+                        <input type="time" id="time" name="time" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="insurance">Travel Insurance (optional)</label>
+                        <select id="insurance" name="insurance">
+                            <option value="" disabled selected>Select</option>
+                            <option value="basic">Basic</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-right: 17%; padding-right: 17%;">
+                        <label for="utilities">Utilities (optional):</label>
+                        <select id="utilities" name="utilities">
+                            <option value="" disabled selected>Select</option>
+                            <option value="wifi">Wi-Fi</option>
+                            <option value="snack">Snacks</option>
+                            <option value="wifiSnack">Wi-Fi and Snacks</option>
+                        </select>
+                    </div>
+                    <!-- <input type="checkbox" id="insuranceCheckbox" name="insurance">
+                    <label for="insuranceCheckbox">Travel Insurance</label> -->
+                
+                    <div class="checkbox-group" style="margin-top: 30px;">
+                        <input type="checkbox" id="selectSeatCheckbox" name="selectSeatCheckbox">
+                        <span><label for="selectSeatCheckbox">Choose a Seat</label></span>
+                    </div>
+                    
+                    <!-- Seat Selection Window -->
+                    <div id="seatSelectionWindow" class="side-window">
+                        <h3>Select Your Seat</h3>
+                        <div class="color-codes">
+                            <div class="color-code">
+                                <div class="seat available"></div>
+                                <span>Available</span>
+                            </div>
+                            <div class="color-code">
+                                <div class="seat unavailable"></div>
+                                <span>Unavailable</span>
+                            </div>
+                            <div class="color-code">
+                                <div class="seat selected"></div>
+                                <span>Selected</span>
+                            </div>
+                        </div>
+                        <div class="seat-map">
+                            <div class="row">
+                                <button type="button" class="seat">1A</button>
+                                <button type="button" class="seat">1B</button>
+                                <button type="button" class="seat">1C</button>
+                                <!-- Add more seats here -->
+                            </div>
+                            <div class="row">
+                                <button type="button" class="seat">2A</button>
+                                <button type="button" class="seat">2B</button>
+                                <button type="button" class="seat">2C</button>
+                                <!-- Add more seats here -->
+                            </div>
+                            <div class="row">
+                                <button type="button" class="seat">3A</button>
+                                <button type="button" class="seat">3B</button>
+                                <button type="button" class="seat">3C</button>
+                                <!-- Add more seats here -->
+                            </div>
+                        </div>
+                        <button id="confirmSeatButton">Confirm Seat</button>
+                    </div>
+                    <input type="hidden" id="selectedSeatInput" name="selectedSeatInput">
+                </div>
+            </fieldset>
+            <!-- Additional Services Section -->
+            <fieldset>
+                <legend>Additional Services</legend>
+                <div class="checkbox-group">              
+                    <input type="checkbox" id="bookTaxi" name="bookTaxi">
+                    <span style="padding-right: 5%;"><label for="bookTaxi">Book A Taxi</label></span>
+
+                    <input type="hidden" id="selectedDriver" name="selectedDriver" value="{{ selected_driver_id }}">
+
+                    <input type="checkbox" id="insuranceCheckbox" name="insurance">
+                    <label for="insuranceCheckbox">Book Hotel Services</label>
+                </div>
+                <!-- Taxi Booking Subsection -->
+                <div id="taxiBooking" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pickupLocation">Pick-up Location:</label>
+                            <input type="text" id="pickupLocation" name="pickupLocation">
+                        </div>
+                        <div class="form-group">
+                            <label for="dropoffLocation">Drop-off Location:</label>
+                            <input type="text" id="dropoffLocation" name="dropoffLocation">
+                        </div>
+                    </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taxiDate">Date:</label>
+                                <input type="date" id="taxiDate" name="taxiDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="taxiTime">Time:</label>
+                                <input type="time" id="taxiTime" name="taxiTime">
+                            </div>
+                        </div>
+                </div>
+            </fieldset>
+            <!-- Payment and Confirmation Section -->
+            <fieldset>
+                <legend>Payment and Confirmation</legend>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Train Ticket:</strong> <span id="ticketPrice" name="ticketPrice"></span>
+                </div>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Travel Insurance:</strong> <span id="insurancePrice" name="insurancePrice"></span>
+                </div>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Utilities (wi-fi):</strong> <span id="wifiPrice" name="wifiPrice"></span>
+                </div>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Utilities (Snacks):</strong> <span id="snackPrice" name="snackPrice"></span>
+                </div>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Utilities (Wi-Fi and Snacks):</strong> <span id="wifiSnackPrice" name="wifiSnackPrice"></span>
+                </div>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Taxi Services:</strong> <span id="taxiPrice" name="taxiPrice"></span>
+                </div><br>
+                <div class="pricing-cell" colspan="2">
+                    <strong>Total Booking Price:</strong> <span id="totalPrice" name="totalPrice"></span>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method:</label>
+                    <select id="paymentMethod" name="paymentMethod">
+                        <option value="M-pesa">M-pesa</option>
+                    </select>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn-submit">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTotalPrice();
+
+    document.getElementById('addChildTraveler').addEventListener('change', calculateTotalPrice);
+    document.getElementById('travelClass').addEventListener('change', calculateTotalPrice);
+    document.getElementById('trainType').addEventListener('change', calculateTotalPrice);
+    document.getElementById('insurance').addEventListener('change', calculateTotalPrice);
+    document.getElementById('utilities').addEventListener('change', calculateTotalPrice);
+    document.getElementById('bookTaxi').addEventListener('change', calculateTotalPrice); 
+});
+
+function initializeTotalPrice() {
+    const storedTotalPrice = sessionStorage.getItem('totalPrice');
+    const storedTicketPrice = sessionStorage.getItem('ticketPrice');
+    const storedInsurancePrice = sessionStorage.getItem('insurancePrice');
+    const storedWifiPrice = sessionStorage.getItem('wifiPrice'); 
+    const storedSnackPrice = sessionStorage.getItem('snackPrice'); 
+    const storedWifiSnackPrice = sessionStorage.getItem('wifiSnackPrice');
+    const storedInsuranceType = sessionStorage.getItem('insuranceType'); 
+
+    if (storedTotalPrice !== null) {
+        document.getElementById('totalPrice').textContent = `Ksh ${storedTotalPrice}`;
+    }
+    if (storedTicketPrice !== null) {
+        document.getElementById('ticketPrice').textContent = `Ksh ${storedTicketPrice}`;
+    } 
+    if (storedInsurancePrice !== null) {
+        document.getElementById('insurancePrice').textContent = `Ksh ${storedInsurancePrice}`;
+    } 
+    if (storedWifiPrice !== null) {
+        document.getElementById('wifiPrice').textContent = `Ksh ${storedWifiPrice}`;
+    }
+    if (storedSnackPrice !== null) {
+        document.getElementById('snackPrice').textContent = `Ksh ${storedSnackPrice}`;
+    }
+    if (storedWifiSnackPrice !== null) {
+        document.getElementById('wifiSnackPrice').textContent = `Ksh ${storedWifiSnackPrice}`;
+    }
+    if (storedInsuranceType !== null) { // Add this block
+        document.getElementById('insurance').value = storedInsuranceType;
+    } else {
+        calculateTotalPrice();
+    }
+}
+
+function calculateTotalPrice() {
+    const isChildTraveler = document.getElementById('addChildTraveler').checked;
+    const travelClass = document.getElementById('travelClass').value;
+    const trainType = document.getElementById('trainType').value;
+    const insuranceType = document.getElementById('insurance').value;
+    const utilities = document.getElementById('utilities').value;
+    const bookTaxi = document.getElementById('bookTaxi').checked;
+
+    let totalPrice = 0;
+    let ticketPrice = 0;
+    let insurancePrice = 0;
+    let wifiPrice = 0;
+    let snackPrice = 0;
+    let wifiSnackPrice = 0;
+    let taxiPrice = 0;
+
+    if (isChildTraveler) {
+        if (travelClass === 'economy') {
+            if (trainType === 'Inter-County') {
+                ticketPrice += 1000;
+            } else if (trainType === 'Afternoon') {
+                ticketPrice += 3000;
+            } else if (trainType === 'Night') {
+                ticketPrice += 3000;
+            }
+        } else if (travelClass === 'first') {
+            if (trainType === 'Inter-County') {
+                ticketPrice += 1500;
+            } else if (trainType === 'Afternoon') {
+                ticketPrice += 3500;
+            } else if (trainType === 'Night') {
+                ticketPrice += 3500;
+            }
+        }
+    } else {
+        if (travelClass === 'first') {
+            if (trainType === 'Inter-County') {
+                ticketPrice += 2500;
+            } else if (trainType === 'Afternoon') {
+                ticketPrice += 4500;
+            } else if (trainType === 'Night') {
+                ticketPrice += 4500;
+            }
+        } else if (travelClass === 'economy') {
+            if (trainType === 'Inter-County') {
+                ticketPrice += 2000;
+            } else if (trainType === 'Afternoon') {
+                ticketPrice += 4000;
+            } else if (trainType === 'Night') {
+                ticketPrice += 4000;
+            }
+        }
+    }
+
+    if (insuranceType === 'premium') {
+        insurancePrice += 2000;
+    } else if (insuranceType === 'basic') {
+        insurancePrice += 500;
+    }
+
+    if (utilities === 'snack') {
+        snackPrice += 800;
+    } else if (utilities === 'wifi') {
+        wifiPrice += 200;
+    } else if(utilities === 'wifiSnack'){
+        wifiSnackPrice += 800;
+    }
+
+    if (bookTaxi) {
+        taxiPrice += 500; 
+    }
+
+    // Sum up all prices
+    totalPrice += ticketPrice + insurancePrice + wifiPrice + snackPrice + wifiSnackPrice + taxiPrice;
+
+    // Store prices in session storage for persistent display
+    sessionStorage.setItem('totalPrice', totalPrice);
+    sessionStorage.setItem('ticketPrice', ticketPrice);
+    sessionStorage.setItem('insurancePrice', insurancePrice);
+    sessionStorage.setItem('wifiPrice', wifiPrice); 
+    sessionStorage.setItem('snackPrice', snackPrice); 
+    sessionStorage.setItem('wifiSnackPrice', wifiSnackPrice);     
+    sessionStorage.setItem('taxiPrice', taxiPrice); 
+    sessionStorage.setItem('insuranceType', insuranceType); 
+
+    // Update the displayed prices in the HTML
+    document.getElementById('ticketPrice').textContent = `Ksh ${ticketPrice}`;
+    document.getElementById('insurancePrice').textContent = `Ksh ${insurancePrice}`;
+    document.getElementById('wifiPrice').textContent = `Ksh ${wifiPrice}`;
+    document.getElementById('snackPrice').textContent = `Ksh ${snackPrice}`;
+    document.getElementById('wifiSnackPrice').textContent = `Ksh ${wifiSnackPrice}`;
+    document.getElementById('taxiPrice').textContent = `Ksh ${taxiPrice}`;
+    document.getElementById('totalPrice').textContent = `Ksh ${totalPrice}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle selecting a driver from the approved drivers list
+    function handleSelectDriver(driverId) {
+        document.getElementById('selectedDriver').value = driverId;
+    }
+
+    // Example: Assuming you have a way to trigger the selection
+    // Replace with actual event listener or method of selection
+    // For example, if you have a button that selects a driver
+    document.querySelectorAll('.select-seat-btn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();  // Prevent form submission
+            let driverId = this.getAttribute('data-driver-id');
+            handleSelectDriver(driverId);  // Update selectedDriver field
+        });
+    });
+});
+
+// Function to handle child traveler checkbox
+document.getElementById('addChildTraveler').addEventListener('change', function() {
+    document.getElementById('childDetails').style.display = this.checked ? 'block' : 'none';
+    saveFormData(); // Save form data whenever checkbox state changes
+    sessionStorage.setItem('childTravelerChecked', this.checked);
+});
+
+// Function to handle taxi booking checkbox
+document.getElementById('bookTaxi').addEventListener('change', function() {
+    const taxiBookingDetails = document.getElementById('taxiBooking');
+    if (this.checked) {
+        // Save form data to sessionStorage
+        saveFormData();
+        // Redirect to the drivers profile page
+        sessionStorage.setItem('bookTaxiChecked', 'true');
+        redirectToDriversProfile();
+    } else {
+        // Clear input fields and collapse taxi booking details
+        clearTaxiBookingDetails();
+        taxiBookingDetails.style.display = 'none';
+        // Remove checkbox state from sessionStorage
+        sessionStorage.removeItem('bookTaxiChecked');
+    }
+});
+
+// Function to handle select seat checkbox
+document.getElementById('selectSeatCheckbox').addEventListener('change', function() {
+    const seatSelectionWindow = document.getElementById('seatSelectionWindow');
+    if (this.checked) {
+        seatSelectionWindow.classList.add('show');
+        sessionStorage.setItem('selectSeatCheckbox', 'true');
+    } else {
+        seatSelectionWindow.classList.remove('show');
+        sessionStorage.setItem('selectSeatCheckbox', 'false');
+        sessionStorage.removeItem('selectedSeats');
+        clearSelectedSeats();
+    }
+    saveFormData(); // Save form data whenever checkbox state changes
+});
+
+function saveFormData() {
+    const formData = new FormData(document.getElementById('bookingForm'));
+    for (const [key, value] of formData.entries()) {
+        sessionStorage.setItem(key, value);
+    }
+    
+    sessionStorage.setItem('from', document.getElementById('from').value);  
+    sessionStorage.setItem('to', document.getElementById('to').value);      
+
+    const selectedSeats = Array.from(document.querySelectorAll('.seat.selected')).map(seat => seat.dataset.seatNumber);
+    sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+}
+
+
+// Function to clear taxi booking details
+function clearTaxiBookingDetails() {
+    document.getElementById('pickupLocation').value = '';
+    document.getElementById('dropoffLocation').value = '';
+    document.getElementById('taxiDate').value = '';
+    document.getElementById('taxiTime').value = '';
+}
+
+// Function to clear selected seats
+function clearSelectedSeats() {
+    document.querySelectorAll('.seat.selected').forEach(seat => {
+        seat.classList.remove('selected');
+    });
+}
+
+// Function to restore form state from sessionStorage
+function restoreFormData() {
+    const isChildTravelerChecked = sessionStorage.getItem('childTravelerChecked');
+    if (isChildTravelerChecked === 'true') {
+        document.getElementById('addChildTraveler').checked = true;
+        document.getElementById('childDetails').style.display = 'block';
+    }
+
+    // Populate the form with saved data from sessionStorage
+    const form = document.getElementById('bookingForm');
+    for (const key of Object.keys(sessionStorage)) {
+        const formElement = form.elements[key];
+        if (formElement) {
+            formElement.value = sessionStorage.getItem(key);
+        }
+    }
+
+    // Restore 'from' and 'to' values explicitly
+    document.getElementById('from').value = sessionStorage.getItem('from') || '';  
+    document.getElementById('to').value = sessionStorage.getItem('to') || ''; 
+
+    // Trigger the change event on trainType to populate 'from' and 'to' options
+    document.getElementById('trainType').dispatchEvent(new Event('change'));
+
+    // Restore book taxi state
+    const isBookTaxiChecked = sessionStorage.getItem('bookTaxiChecked');
+    if (isBookTaxiChecked === 'true') {
+        document.getElementById('bookTaxi').checked = true;
+        document.getElementById('taxiBooking').style.display = 'block';
+    }
+    
+    
+    // Restore select seat checkbox state
+    const isSelectSeatChecked = sessionStorage.getItem('selectSeatCheckbox');
+    if (isSelectSeatChecked === 'true') {
+        document.getElementById('selectSeatCheckbox').checked = true;
+        document.getElementById('seatSelectionWindow').classList.add('show');
+
+        // Restore selected seats
+        const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats'));
+        if (selectedSeats) {
+            selectedSeats.forEach(seatNumber => {
+                const seatElement = document.querySelector(`.seat[data-seat-number="${seatNumber}"]`);
+                if (seatElement) {
+                    seatElement.classList.add('selected');
+                }
+            });
+        }
+    }
+
+    // Restore state of additional service checkboxes
+    const additionalServices = ['mealCheckbox', 'snackCheckbox', 'wheelchairCheckbox', 'insuranceCheckbox'];
+    additionalServices.forEach(service => {
+        const isChecked = sessionStorage.getItem(service);
+        if (isChecked === 'true') {
+            document.getElementById(service).checked = true;
+        }
+    });
+}
+
+// Populate form data from sessionStorage when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    restoreFormData();
+
+    // Maintain state of all checkboxes after a redirect
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        const checkboxState = sessionStorage.getItem(checkbox.id);
+        if (checkboxState === 'true') {
+            checkbox.checked = true;
+        }
+    });
+});
+
+
+// Function to redirect to the drivers profile page
+function redirectToDriversProfile() {
+    window.location.href = "{% url 'approved_drivers' %}";
+}
+
+const trainStations = {
+    "Inter-County": [
+        { from: "Nairobi", to: ["Mombasa", "Mariakani"], departureTime: "08:00" },
+        { from: "Mombasa", to: ["Nairobi", "Mariakani"], departureTime: "08:00" },
+        { from: "Mariakani", to: ["Nairobi", "Mombasa"], departureTime: "10:00" }
+    ],
+    "Afternoon": [
+        { from: "Nairobi", to: ["Mombasa", "Voi"], departureTime: "15:00" },
+        { from: "Mombasa", to: ["Nairobi", "Voi"], departureTime: "15:00" },
+        { from: "Voi", to: ["Nairobi", "Mombasa"], departureTime: "17:00" }
+    ],
+    "Night": [
+        { from: "Nairobi", to: ["Mombasa"], departureTime: "22:00" },
+        { from: "Mombasa", to: ["Nairobi"], departureTime: "22:00" }
+    ]
+};
+
+// Event listener for trainType selection change
+document.getElementById('trainType').addEventListener('change', function() {
+    const selectedTrainType = this.value;
+    const fromSelect = document.getElementById('from');
+    const toSelect = document.getElementById('to');
+    const timeInput = document.getElementById('time');
+    
+    const routes = trainStations[selectedTrainType];
+    
+    fromSelect.innerHTML = '';
+    toSelect.innerHTML = '';
+    timeInput.value = '';
+
+    routes.forEach(route => {
+        const optionFrom = document.createElement('option');
+        optionFrom.value = route.from;
+        optionFrom.textContent = route.from;
+        fromSelect.appendChild(optionFrom);
+    });
+
+    if (routes.length > 0) {
+        timeInput.value = routes[0].departureTime;
+    }
+
+    updateToStationsAndTime();
+});
+
+// Event listener for from station change
+document.getElementById('from').addEventListener('change', updateToStationsAndTime);
+
+// Function to update to stations and time based on selected train type and from station
+function updateToStationsAndTime() {
+    const selectedTrainType = document.getElementById('trainType').value;
+    const selectedFromStation = document.getElementById('from').value;
+    const selectedRoute = trainStations[selectedTrainType].find(route => route.from === selectedFromStation);
+    const toSelect = document.getElementById('to');
+    const timeInput = document.getElementById('time');
+    
+    toSelect.innerHTML = '';
+    timeInput.value = '';
+
+    if (selectedRoute) {
+        selectedRoute.to.forEach(toStation => {
+            const optionTo = document.createElement('option');
+            optionTo.value = toStation;
+            optionTo.textContent = toStation;
+            toSelect.appendChild(optionTo);
+        });
+
+        timeInput.value = selectedRoute.departureTime;
+    }
+}
+
+// Event listener for form submission to save all inputs in sessionStorage
+document.getElementById('bookingForm').addEventListener('submit', function(event) {
+    saveFormData();
+});
+
+// Session expiry management
+function SessionExpiry() {
+    alert('Your session has expired. Please log in again.');
+    sessionStorage.clear();
+    window.location.href = '/login'; // Redirect to login page
+}
+
+// Event listener for "Select Seat" checkbox
+document.getElementById('selectSeatCheckbox').addEventListener('change', function() {
+    const seatSelectionWindow = document.getElementById('seatSelectionWindow');
+    if (this.checked) {
+        seatSelectionWindow.classList.add('show');
+        sessionStorage.setItem('selectSeatCheckbox', 'true');
+    } else {
+        seatSelectionWindow.classList.remove('show');
+        sessionStorage.setItem('selectSeatCheckbox', 'false');
+    }
+    saveFormData();
+});
+
+// Event listeners for seat selection
+const seats = document.querySelectorAll('.seat');
+seats.forEach(seat => {
+    seat.addEventListener('click', function() {
+        if (!this.classList.contains('selected')) {
+            this.classList.add('selected');
+        } else {
+            this.classList.remove('selected');
+        }
+        updateSelectedSeats();
+    });
+});
+
+// Function to update selected seats in sessionStorage
+function updateSelectedSeats() {
+    const selectedSeats = [];
+    const seats = document.querySelectorAll('.seat.selected');
+    seats.forEach(seat => {
+        selectedSeats.push(seat.getAttribute('data-seat-number'));
+    });
+    sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+    saveFormData();
+}
+
+
+// Function to populate form data from sessionStorage when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    restoreFormData();
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        const checkboxState = sessionStorage.getItem(checkbox.id);
+        if (checkboxState === 'true') {
+            checkbox.checked = true;
+            if (checkbox.id === 'bookTaxi') {
+                document.getElementById('taxiBooking').style.display = 'block';
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle selecting a driver from the approved drivers list
+    function handleSelectDriver(driverId) {
+        document.getElementById('selectedDriver').value = driverId;
+    }
+
+    // Example: Assuming you have a way to trigger the selection
+    // Replace with actual event listener or method of selection
+    // For example, if you have a button that selects a driver
+    document.querySelectorAll('.select-seat-btn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();  // Prevent form submission
+            let driverId = this.getAttribute('data-driver-id');
+            handleSelectDriver(driverId);  // Update selectedDriver field
+        });
+    });
+});
+
+});
+
+// Function to redirect to the drivers profile page
+function redirectToDriversProfile() {
+    window.location.href = "{% url 'approved_drivers' %}";
+}
+
+// Function to toggle display of insurance options based on checkbox state
+function toggleInsuranceOptions(show) {
+    const insuranceOptions = document.getElementById('insuranceOptions');
+    insuranceOptions.style.display = show ? 'block' : 'none';
+}
+
+// Event listener for insuranceCheckbox change
+document.getElementById('insuranceCheckbox').addEventListener('change', function() {
+    toggleInsuranceOptions(this.checked);
+    if (this.checked) {
+        populateInsuranceOptions();
+    }
+});
+
+// Function to populate insurance options
+function populateInsuranceOptions() {
+    const insuranceTypeSelect = document.getElementById('insuranceType');
+    // Clear existing options
+    insuranceTypeSelect.innerHTML = '';
+    // Add new insurance options
+    const insuranceTypes = ["Premium", "Basic"]; // Example insurance options
+    insuranceTypes.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        insuranceTypeSelect.appendChild(option);
+    });
+}
+
+const availableSeats = [
+    { seatNumber: '1A', status: 'available' },
+    { seatNumber: '1B', status: 'available' },
+    { seatNumber: '1C', status: 'unavailable' },
+    { seatNumber: '2A', status: 'available' },
+    { seatNumber: '2B', status: 'selected' },
+    { seatNumber: '2C', status: 'available' },
+    { seatNumber: '3A', status: 'available' },
+    { seatNumber: '3B', status: 'available' },
+    { seatNumber: '3C', status: 'available' }
+
+    
+];
+
+// Generate seat elements
+function generateSeatElement(seat) {
+    const seatElement = document.createElement('div');
+    seatElement.classList.add('seat');
+    seatElement.textContent = seat.seatNumber;
+    seatElement.setAttribute('data-status', seat.status);
+    if (seat.status === 'unavailable') {
+        seatElement.classList.add('unavailable');
+        seatElement.disabled = true;
+    } else {
+        seatElement.addEventListener('click', function() {
+            this.classList.toggle('selected');
+        });
+    }
+    return seatElement;
+}
+
+// Populate seat map
+function populateSeatMap(seats) {
+    const seatMap = document.querySelector('.seat-map');
+    seatMap.innerHTML = '';
+    seats.forEach(seat => {
+        const seatElement = generateSeatElement(seat);
+        seatMap.appendChild(seatElement);
+    });
+}
+
+// Populate seat map on page load
+populateSeatMap(availableSeats);
+
+// Handle "Select Seat" checkbox change
+document.getElementById('selectSeatCheckbox').addEventListener('change', function() {
+    const seatSelectionWindow = document.getElementById('seatSelectionWindow');
+    if (this.checked) {
+        seatSelectionWindow.classList.add('show');
+    } else {
+        seatSelectionWindow.classList.remove('show');
+    }
+});
+
+// Confirm seat selection
+document.getElementById('confirmSeatButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    const selectedSeats = document.querySelectorAll('.seat.selected');
+    if (selectedSeats.length === 0) {
+        alert('Please select a seat before proceeding.');
+    } else {
+        const selectedSeatNumbers = Array.from(selectedSeats).map(seat => seat.textContent);
+        document.getElementById('selectedSeatInput').value
+        document.getElementById('seatSelectionWindow').classList.remove('show');
+    }
+});
+
+// Handle form submission
+document.getElementById('bookingForm').addEventListener('submit', function(event) {
+    const selectSeatChecked = document.getElementById('selectSeatCheckbox').checked;
+    const selectedSeats = document.querySelectorAll('.seat.selected');
+
+    if (selectSeatChecked && selectedSeats.length === 0) {
+        event.preventDefault();
+        alert('Please select a seat before proceeding.');
+    } else {
+        const selectedSeatNumbers = Array.from(selectedSeats).map(seat => seat.textContent).join('');
+        document.getElementById('selectedSeatInput').value = selectedSeatNumbers;
+    }
+});
+
+
+
+// Function to save form state in sessionStorage
+function saveFormState() {
+    const formState = {
+        adultName: document.getElementById('adultName').value,
+        dob: document.getElementById('dob').value,
+        booking_email_or_phone: document.getElementById('booking_email_or_phone').value,
+        addChildTraveler: document.getElementById('addChildTraveler').checked,
+        childName: document.getElementById('childName').value,
+        childAge: document.getElementById('childAge').value,
+        drop: document.getElementById('drop').value,
+        pick: document.getElementById('pick').value,
+        specialNeeds: document.getElementById('specialNeeds').value,
+        travelClass: document.getElementById('travelClass').value,
+        trainType: document.getElementById('trainType').value,
+        from: document.getElementById('from').value,
+        to: document.getElementById('to').value,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        selectedSeatInput: document.getElementById('selectedSeatInput').value,
+        meal: document.getElementById('mealCheckbox').checked,
+        snack: document.getElementById('snackCheckbox').checked,
+        wheelchair: document.getElementById('wheelchairCheckbox').checked,
+        insurance: document.getElementById('insuranceCheckbox').checked,
+        bookTaxi: document.getElementById('bookTaxi').checked
+    };
+    sessionStorage.setItem('formState', JSON.stringify(formState));
+}
+
+// Function to load form state from sessionStorage
+function loadFormState() {
+    const formState = JSON.parse(sessionStorage.getItem('formState'));
+    if (formState) {
+        document.getElementById('adultName').value = formState.adultName;
+        document.getElementById('dob').value = formState.dob;
+        document.getElementById('booking_email_or_phone').value = formState.booking_email_or_phone;
+        document.getElementById('addChildTraveler').checked = formState.addChildTraveler;
+        document.getElementById('childName').value = formState.childName;
+        document.getElementById('childAge').value = formState.childAge;
+        document.getElementById('drop').value = formState.drop;
+        document.getElementById('pick').value = formState.pick;
+        document.getElementById('specialNeeds').value = formState.specialNeeds;
+        document.getElementById('travelClass').value = formState.travelClass;
+        document.getElementById('trainType').value = formState.trainType;
+        document.getElementById('from').value = formState.from;
+        document.getElementById('to').value = formState.to;
+        document.getElementById('date').value = formState.date;
+        document.getElementById('time').value = formState.time;
+        document.getElementById('selectedSeatInput').value = formState.selectedSeatInput;
+        document.getElementById('mealCheckbox').checked = formState.meal;
+        document.getElementById('snackCheckbox').checked = formState.snack;
+        document.getElementById('wheelchairCheckbox').checked = formState.wheelchair;
+        document.getElementById('insuranceCheckbox').checked = formState.insurance;
+        document.getElementById('bookTaxi').checked = formState.bookTaxi;
+
+        // Show child details if addChildTraveler was checked
+        const ischildDetails = document.getElementById('childDetails');
+        ischildDetails.style.display = formState.addChildTraveler ? 'block' : 'none';
+    }
+}
+
+// Load form state when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadFormState();
+});
+
+// Function to save form state before redirecting
+function saveFormStateBeforeRedirect() {
+    const currentURL = window.location.href;
+    if (currentURL.includes('approved-drivers-page-url')) {
+        saveFormData();
+    }
+}
+
+// Function to redirect to the drivers profile page
+function redirectToDriversProfile() {
+    window.location.href = "{% url 'approved_drivers' %}";
+}
+
+// Function to populate insurance options
+populateInsuranceOptions();
+
+// Function to populate seat map on page load
+populateSeatMap(availableSeats);
+</script>
+</body>
+</html>

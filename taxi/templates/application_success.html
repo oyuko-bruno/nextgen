@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Success</title>
+    <link rel="stylesheet" href="{% static 'css/success.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Thank You for Your Application!</h1>
+        <p>Dear {{ full_name }},</p>
+        <p>Thank you for your application to join the NextGen network!</p>
+        <p>We will review your information thoroughly. Once approved, you will receive a notification with your login credentials, allowing you to access the driver's portal and start receiving booking requests from passengers.</p>
+        <!-- <div class="additional-info">
+            <h2>Additional Information:</h2>
+            <ul>
+                <li><strong>Document Upload:</strong> Uploading the required documents ensures a faster application process.</li>
+                <li><strong>Accuracy:</strong> Please ensure all information provided is accurate. False information may result in disqualification.</li>
+                <li><strong>Support:</strong> For any questions regarding the application process, please contact us at <a href="tel:{{ phone_number }}">{{ phone_number }}</a> or <a href="mailto:{{ email_address }}">{{ email_address }}</a>.</li>
+            </ul> -->
+        <!-- </div> -->
+        <p>To log out, please <a href="{%url 'index' %}">click here</a></p>
+        <!-- <p>We look forward to welcoming you to the NextGen network!</p> -->
+        <p>Best regards,</p>
+        <p>Managing Director<br>NextGen Transportation</p>
+    </div>
+</body>
+</html>

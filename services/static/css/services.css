@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@200;400;500;600;700&display=swap');
+
+body
+{
+    line-height: 1.5;
+    font-size: 16px ;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+*
+{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+
+/* Navbar section */
+.navbar {
+    padding: 15px 0;    
+}
+
+.navbar .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 80px;
+    margin-right: 100px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 40px;
+   
+}
+.brand-text{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: x-large;
+    font-weight: 500;
+    padding-left: 10px;
+    padding-top: 8px;
+    color: rgb(12, 12, 75);
+}
+.navbar-toggler {
+    display: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+.navbar-toggler:focus {
+    outline: none;
+}
+
+.navbar-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item {
+    margin-left: 15px;
+}
+
+.nav-link {
+    color: rgb(12, 12, 75);
+    text-decoration: none;
+    padding: 10px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.nav-button {
+    padding: 10px 20px;
+    background-color:#ff6600;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: bold;
+    border: none;
+    margin: 0 50px 0 280px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color:#ff9933;
+}
+
+.nav-link:hover {
+    color: #ff6600;
+}
+
+
+/* Booking details styles */
+.booking-details {
+    background-color: #f9f9f9;
+    padding: 50px 0;
+}
+
+.details-container {
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.details-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #0c0c4b;
+    text-align: center;
+}
+
+.utility-section {
+    margin-bottom: 60px;
+}
+
+.utility {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px; 
+}
+
+.utility h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #0c0c4b;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    gap: 10px;
+}
+
+.utility p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.utility-details {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.utility-table {
+    width: 100%; /* Adjusted to cover full width */
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.utility-table th,
+.utility-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.utility-table th {
+    color: #0c0c4b;
+}
+
+.table-like th,
+.table-like td {
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.table-like th {
+    color: #0c0c4b;
+}
+
+@media (max-width: 768px) {
+    /* Responsive styles for navbar */
+    .nav-container {
+        padding: 0 10px;
+    }
+
+    .navbar-brand img {
+        height: 30px;
+    }
+
+    .brand-text {
+        font-size: 1.5rem;
+    }
+
+    .navbar-toggler {
+        display: block;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+    }
+
+    .nav-item {
+        margin: 10px 0;
+    }
+
+    .nav-button {
+        margin: 20px 0;
+    }
+
+    .navbar-toggler.active + .navbar-nav {
+        display: flex;
+    }
+}

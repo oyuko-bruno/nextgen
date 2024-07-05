@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .user-exists-error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- sign up form -->
+    <div class="form-container">
+        <h1>Welcome To NextGen</h1>
+        <p>By creating an account to proceed, you agree to NextGen's <a href="#">Terms and Conditions.</a></p>
+        <!-- <h3>Sign Up</h3> -->
+        <form id="signup_form" action="{% url 'signup' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="signup_email_or_phone">Email or Phone number</label>
+                <input type="text" id="signup_email_or_phone" name="email_or_phone" required>
+                <span id="email_or_phone_error" class="error"></span>
+                {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <span style="color: red; text-align: left;"><p class="error user-exists-error">{{ message }}</p></span>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="signup_password">Password</label>
+                <input type="password" id="signup_password" name="password" required>
+                <span id="password_error" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                <span id="confirm_password_error" class="error"></span>
+            </div>
+            <div class="form-group">
+                <div class="pass-options">
+                    <div class="show-password">
+                        <input type="checkbox" id="show_password">
+                        <label for="show_password">Show Password</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="form-button">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
+    
+     
+    <script>
+        document.getElementById("show_password").addEventListener("change", function () {
+            var passwordInput = document.getElementById("signup_password");
+            var confirmPasswordInput = document.getElementById("confirm_password");
+            if (this.checked) {
+                passwordInput.type = 'text';
+                confirmPasswordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+                confirmPasswordInput.type = 'password';
+            }
+        });
+
+        document.getElementById("signup_form").addEventListener("submit", function(event) {
+            var email_or_phone = document.getElementById("signup_email_or_phone");
+            var password = document.getElementById("signup_password");
+            var confirm_password = document.getElementById("confirm_password");
+            var email_or_phone_error = document.getElementById("email_or_phone_error");
+            var password_error = document.getElementById("password_error");
+            var confirm_password_error = document.getElementById("confirm_password_error");
+
+            var email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var phone_regex = /^[0-9]{10}$/; // Adjust the regex according to your phone number format
+
+            var uppercase_regex = /[A-Z]/;
+            var lowercase_regex = /[a-z]/;
+            var digit_regex = /[0-9]/;
+            var special_character_regex = /[!@#$%^&*(),.?":{}|<>]/;
+
+            if (!email_regex.test(email_or_phone.value) && !phone_regex.test(email_or_phone.value)) {
+                // Check if input is neither a valid email nor a valid phone number
+                email_or_phone_error.textContent = "Please enter a valid email or phone number!";
+                event.preventDefault();
+            } else {
+                email_or_phone_error.textContent = "";
+            }
+
+            if (email_or_phone_error.textContent === "") {
+                if (password.value.length < 8) {
+                    password_error.textContent = "Password must be at least 8 characters long!";
+                    password.value = ""; // Clear the password field
+                    confirm_password.value = ""; // Clear the confirm password field
+                    event.preventDefault();
+                } else if (!uppercase_regex.test(password.value)) {
+                    password_error.textContent = "Password must contain at least one uppercase letter!";
+                    password.value = ""; // Clear the password field
+                    confirm_password.value = ""; // Clear the confirm password field
+                    event.preventDefault();
+                } else if (!lowercase_regex.test(password.value)) {
+                    password_error.textContent = "Password must contain at least one lowercase letter!";
+                    password.value = ""; // Clear the password field
+                    confirm_password.value = ""; // Clear the confirm password field
+                    event.preventDefault();
+                } else if (!digit_regex.test(password.value)) {
+                    password_error.textContent = "Password must contain at least one digit!";
+                    password.value = ""; // Clear the password field
+                    confirm_password.value = ""; // Clear the confirm password field
+                    event.preventDefault();
+                } else if (!special_character_regex.test(password.value)) {
+                    password_error.textContent = "Password must contain at least one special character!";
+                    password.value = ""; // Clear the password field
+                    confirm_password.value = ""; // Clear the confirm password field
+                    event.preventDefault();
+                } else {
+                    password_error.textContent = "";
+                }
+
+                if (password.value !== confirm_password.value) {
+                    confirm_password_error.textContent = "Passwords do not match!";
+                    confirm_password.value = ""; // Clear the confirm password field
+                    event.preventDefault();
+                } else {
+                    confirm_password_error.textContent = "";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

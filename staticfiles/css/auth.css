@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@200;400;500;600;700&display=swap');
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.form-container {
+    background-color: #fff;
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Form header */
+.form-container h1 {
+    color: #ff6600;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-container p {
+    font-size: 14px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Form fields */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Form action buttons */
+.form-button {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #ff6600;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-button:hover {
+    background-color: #ff9933;
+}
+
+/* Form footer */
+.form-container p {
+    font-size: 14px;
+    color: #666;
+}
+
+.form-container p a {
+    color: #ff6600;
+    text-decoration: none;
+}
+
+.form-container p a:hover {
+    text-decoration: underline;
+}
+
+/* Show password and forgot password */
+.pass-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.show-password {
+    display: flex;
+    align-items: center;
+}
+
+.show-password input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.forgot-password a {
+    font-size: 14px;
+    color: #ff6600;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Social login */
+.social-login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.google-login-button {
+    display: inline-flex;
+    align-items: center;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.google-login-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* .google-login-button:hover {
+    text-decoration: underline;
+} */
+
+.google-login-button .dash {
+    margin: 0 5px;
+    border-top: 1px solid;
+    width: 200px; 
+    height: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}

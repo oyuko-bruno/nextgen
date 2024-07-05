@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@200;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://kit.fontawesome.com/742518de6f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/services.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+</head>
+<body>
+     <!-- navbar -->
+     <nav class="navbar">
+        <div class="nav-container">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">
+                    <img src="{% static 'images/logo.jpg' %}" alt="Logo">
+                    <span class="brand-text">NextGen</span>
+                </a>
+                <button class="navbar-toggler" onclick="toggleNav()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="{% url 'index' %}" class ="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="{% url 'services' %}" class="nav-link">Services</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                    <a href="{% url 'booking' %}"><button class="nav-button">Book a Ticket</button></a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Booking Details -->
+    <section class="booking-details">
+        <div class="details-container">
+            <h2>Services Charges</h2>
+            <div class="utility-section">
+                <div class="utility">
+                    <h3><i class="fas fa-dollar-sign"></i> Price per Head</h3>
+                    <p>Traveling with NextGen is affordable for everyone. Our prices are as follows:</p>
+                </div>
+                <div class="utility-details table-like">
+                    <table>
+                        <tr>
+                            <th>Category</th>
+                            <th>Price</th>
+                        </tr>
+                        <tr>
+                            <td>Adults</td>
+                            <td>Ksh.6500</td>
+                        </tr>
+                        <tr>
+                            <td>Children (under 12)</td>
+                            <td>Ksh.4000</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- Taxi Services and Charges -->
+            <section class="taxi-services">
+                <div class="details-container">
+                    <div class="utility-section">
+                        <div class="utility">
+                            <h3><i class="fas fa-taxi"></i> Taxi Services</h3>
+                            <p>Experience the convenience of integrated travel solutions with NextGen Railways. Our online platform seamlessly connects you with verified taxi services for hassle-free transportation to and from the railway station.</p>
+                        </div>
+                        <div class="utility-details table-like">
+                            <table>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Price</th>
+                                </tr>
+                                <tr>
+                                    <td>Airport Transfer (one way)</td>
+                                    <td>Ksh.1500</td>
+                                </tr>
+                                <tr>
+                                    <td>City Tour (per hour)</td>
+                                    <td>Ksh.800</td>
+                                </tr>
+                                <!-- Add more services and charges as needed -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="utility-section">
+                <div class="utility">
+                    <h3><i class="fas fa-wifi"></i> Utility Rentals</h3>
+                    <p>Enhance your travel experience with our utility rentals. Here are the options:</p>
+                </div>
+                <div class="utility-details table-like">
+                    <table>
+                        <tr>
+                            <th>Utility</th>
+                            <th>Price</th>
+                        </tr>
+                        <tr>
+                            <td>WiFi</td>
+                            <td>Ksh.200 per person</td>
+                        </tr>
+                        <tr>
+                            <td>Meal and Snack (Free bottle of water)</td>
+                            <td>Ksh.1000 per person</td>
+                        </tr>
+                        <tr>
+                            <td>Private Room </td>
+                            <td>Ksh.2500</td>
+                        </tr>
+                        <tr>
+                            <td>Travel Insurance</td>
+                            <td>Ksh.2000 for Premium<br>Ksh.500 for Basic </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="utility-section">
+                <div class="utility">
+                    <h3><i class="fas fa-suitcase-rolling"></i> Luggage Price Checker</h3>
+                    <p>Worried about extra luggage fees? Don't be. Check our luggage prices:</p>
+                </div>
+                <div class="utility-details table-like">
+                    <table>
+                        <tr>
+                            <th>Luggage Size</th>
+                            <th>Price</th>
+                        </tr>
+                        <tr>
+                            <td>Small (up to 10kg)</td>
+                            <td>Ksh.100</td>
+                        </tr>
+                        <tr>
+                            <td>Medium (up to 20kg)</td>
+                            <td>Ksh.200</td>
+                        </tr>
+                        <tr>
+                            <td>Large (up to 30kg)</td>
+                            <td>Ksh.350</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="utility-section">
+                <div class="utility">
+                    <h3><i class="fas fa-baby"></i> Child Assisted Traveling Services</h3>
+                    <p>Children travelling alone is made easier and safe with our child assisted traveling services:</p>
+                </div>
+                <div class="utility-details table-like">
+                    <table>
+                        <tr>
+                            <th>Service</th>
+                            <th>Details</th>
+                        </tr>
+                        <tr>
+                            <td>Drop-off and Pick-up</td>
+                            <td>Details of who drops and picks the child, and emergency contact information.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleNav() {
+            var nav = document.getElementById('navbarSupportedContent');
+            nav.classList.toggle('active');
+        }
+
+        function validateForm() {
+            // Your form validation logic here
+            return true; // Return false to prevent form submission
+        }
+    </script>
+</body>
+</html>

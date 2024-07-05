@@ -1,0 +1,374 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #333;
+    color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.navbar-brand .brand-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-collapse {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.nav-item {
+    margin: 0 10px;
+}
+
+.nav-link {
+    color: white;
+    padding: 15px;
+    font-size: 1rem;
+    display: block;
+}
+
+.nav-link:hover {
+    background-color: #555;
+}
+
+.nav-button {
+    background-color: #f1c40f;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.nav-button:hover {
+    background-color: #d4ac0d;
+}
+
+/* Dropdown */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    border: 1px solid #555;
+    margin-top: 10px;
+}
+
+.dropdown-item {
+    color: white;
+    padding: 10px;
+    display: block;
+}
+
+.dropdown-item:hover {
+    background-color: #555;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Hero Section */
+.hero {
+    background: url('../images/hero.jpg') no-repeat center center/cover;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-container {
+    max-width: 800px;
+}
+
+.hero-button {
+    background-color: #f1c40f;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.hero-button:hover {
+    background-color: #d4ac0d;
+}
+
+/* Services Section */
+.services {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+}
+
+.service {
+    max-width: 300px;
+    text-align: center;
+}
+
+.service img {
+    width: 100%;
+    height: auto;
+}
+
+.services-title-container {
+    text-align: center;
+    background-color: #f1c40f;
+    padding: 20px;
+}
+
+.services-title {
+    margin: 0;
+}
+
+/* Time Schedule Section */
+.time-schedule {
+    position: relative;
+    background: url('../images/time.jpg') no-repeat center center/cover;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.time-container {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.time-title {
+    margin-bottom: 20px;
+}
+
+.time-link {
+    color: #f1c40f;
+    font-weight: bold;
+}
+
+.schedule-box {
+    margin-bottom: 20px;
+}
+
+/* About Us Section */
+.about-us {
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+}
+
+.about-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.about-description {
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+.about-button {
+    background-color: #f1c40f;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.about-button:hover {
+    background-color: #d4ac0d;
+}
+
+.about-image-box {
+    position: relative;
+    max-width: 500px;
+}
+
+.about-image-box img {
+    width: 100%;
+    height: auto;
+}
+
+.image-content {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+}
+
+/* Contact Us Section */
+.contact-us {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.contact-container form {
+    max-width: 500px;
+    width: 100%;
+}
+
+.contact-container input,
+.contact-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+.contact-button {
+    background-color: #f1c40f;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.contact-button:hover {
+    background-color: #d4ac0d;
+}
+
+.contact-image {
+    max-width: 500px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Footer Section */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-top,
+.footer-middle,
+.footer-bottom {
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+}
+
+.footer-top .social-text {
+    margin-bottom: 10px;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.social-link {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.footer-middle {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-middle div {
+    max-width: 250px;
+    margin-bottom: 20px;
+}
+
+.signup-button {
+    background-color: #f1c40f;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.signup-button:hover {
+    background-color: #d4ac0d;
+}
+
+/* Back to Top Button */
+#back-to-top {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f1c40f;
+    border: none;
+    padding: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#back-to-top:hover {
+    background-color: #d4ac0d;
+}

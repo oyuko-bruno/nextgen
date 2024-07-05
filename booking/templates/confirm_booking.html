@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h2>Passenger Details</h2>
+    <p>Full Name: {{ booking.passenger.full_name }}</p>
+    <p>Date of Birth: {{ booking.passenger.dob }}</p>
+    <p>Email or Phone: {{ booking.passenger.email_or_phone }}</p>
+    {% if booking.child_traveler %}
+        <h2>Child Traveler Details</h2>
+        <p>Child Name: {{ booking.child_name }}</p>
+        <p>Child Age: {{ booking.child_dob }}</p>
+    {% endif %}
+    <h2>Train Booking Details</h2>
+    <p>Travel Class: {{ booking.travel_class }}</p>
+    <p>Train Type: {{ booking.train_type }}</p>
+    <p>From: {{ booking.from_station }}</p>
+    <p>To: {{ booking.to_station }}</p>
+    <p>Departure Date: {{ booking.departure_date }}</p>
+    <p>Departure Time: {{ booking.departure_time }}</p>
+    <p>Selected Seat: {{ booking.selected_seat }}</p>
+
+    {% if booking.insurance %}
+        <h3>Travel Insurance</h3>
+        <p>Insurance Type: {{ booking.insurance }}</p>
+        <p>Insurance Price: Ksh {{ insurance_price }}</p>
+    {% endif %}
+
+    {% if booking.utilities %}
+        <h3>Utilities</h3>
+        {% if booking.utilities == 'wifi' %}
+            <p>Wi-Fi Price: Ksh {{ wifi_price }}</p>
+        {% elif booking.utilities == 'snack' %}
+            <p>Snack Price: Ksh {{ snack_price }}</p>
+        {% elif booking.utilities == 'wifiSnack' %}
+            <p>Wi-Fi and Snack Price: Ksh {{ wifi_snack_price }}</p>
+        {% endif %}
+    {% endif %}
+
+    {% if taxi_booking %}
+        <h3>Taxi Booking</h3>
+        <p>Taxi Price: Ksh {{ taxi_price }}</p>
+    {% endif %}
+
+    
+
+    {% if taxi_booking %}
+        <h2>Taxi Booking Details</h2>
+        <p>Pickup Location: {{ taxi_booking.pickup_location }}</p>
+        <p>Dropoff Location: {{ taxi_booking.dropoff_location }}</p>
+        <p>Taxi Date: {{ taxi_booking.taxi_date }}</p>
+        <p>Taxi Time: {{ taxi_booking.taxi_time }}</p>
+        {% if selected_driver %}
+            <h3>Selected Driver Details</h3>
+            <p>Full Name: {{ selected_driver.full_name }}</p>
+            <p>Phone: {{ selected_driver.phone }}</p>
+            <p>Email: {{ selected_driver.email }}</p>
+            <p>Vehicle Make and Model: {{ selected_driver.vehicle_make_model }}</p>
+            <p>Registration Number: {{ selected_driver.registration_number }}</p>
+            <img src="{{ selected_driver.vehicle_photo.url }}" alt="{{ selected_driver.full_name }}" style="width:100px;height:100px;">
+        {% endif %}
+    {% endif %}
+
+    <h2>Payment and Confirmation</h2>
+    <p>Total Booking Price: Ksh {{ booking.total_price|floatformat:2 }}</p>
+    <p>Payment Method: M-pesa</p><br>
+
+    <a href="{% url 'download_receipt' booking_id=booking.id %}" download="booking_receipt.pdf">Download Receipt</a>
+</body>
+</html>

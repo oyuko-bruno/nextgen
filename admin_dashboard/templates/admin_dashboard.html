@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="admin-profile">
+            <img src="{% static 'images/logo.png' %}" alt="Profile Picture">
+            <div class="admin-details"></div>
+        </div>
+        <ul>
+            <li><a href="#" onclick="showContent('overview')"><i class="fas fa-tachometer-alt" style="padding-right: 5px;"></i> Overview</a></li>
+            <li><a href="#" onclick="showContent('user-management')"><i class="fas fa-users" style="padding-right: 5px;"></i> User Management</a></li>
+            <li><a href="#" onclick="showContent('train-management')"><i class="fas fa-train" style="padding-right: 5px;"></i> Train Management</a></li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event)">
+                    <i class="fas fa-taxi" style="padding-right: 5px;"></i> Taxi Management
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" onclick="showContent('driver-applications')" class="dropdown-item">Driver Applications</a></li>
+                    <li><a href="#" onclick="showContent('approved-drivers')" class="dropdown-item">Approved Drivers</a></li>
+                </ul>
+            </li>     
+            <li><a href="#" onclick="showContent('reports-analytics')"><i class="fas fa-chart-line" style="padding-right: 5px;"></i> Reports & Analytics</a></li>
+            <li><a href="{% url 'index' %}"> <i class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 5px;"></i>Log Out </a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <section id="overview" class="dashboard-section" style="display: block;">
+            <h2>Overview</h2>
+            <div class="table-like-section">
+                <p>Total Train Bookings: {{ total_train_bookings }}</p>
+                <p>Total Taxi Bookings: {{ total_taxi_bookings }}</p>
+            </div>
+        </section>
+
+        <section id="user-management" class="dashboard-section" style="display: none;">
+            <h2>User Management</h2>
+            <div class="table-like-section">
+                <h3>Recent User Registrations</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.date_joined }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="train-management" class="dashboard-section" style="display: none;">
+            <h2>Train Management</h2>
+            <div class="table-like-section">
+                <h3>Upcoming Train Departures</h3>
+                <ul>
+                    {% for train in upcoming_train_departures %}
+                        <li>{{ train.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section id="driver-applications" class="dashboard-section" style="display: none;">
+            <h2>Driver Applications</h2>
+            <div class="table-like-section">
+                <h3>Taxi Driver Applications</h3>
+                <ul>
+                    {% for application in drivers %}
+                        <li>
+                            <button class="collapsible">{{ application.full_name }}</button>
+                            <div class="content">
+                                <div class="row">
+                                    <div class="column">
+                                        <h4>Driver Information</h4>
+                                        <p>Full Name: {{ application.full_name }}</p>
+                                        <p>Phone: {{ application.phone }}</p>
+                                        <p>Email: {{ application.email }}</p>
+                                        <p>ID Number: {{ application.id_number }}</p>
+                                        <!-- Add more fields as needed -->
+                                    </div>
+                                    <div class="column">
+                                        <h4>Driver License and Vehicle Information</h4>
+                                        <p>License Number: {{ application.license_number }}</p>
+                                        <p>Issuing Authority: {{ application.issuing_authority }}</p>
+                                        <p>Valid Until: {{ application.valid_until }}</p>
+                                        <p>License Class: {{ application.license_class }}</p>
+                                        <p>Vehicle Make/Model: {{ application.vehicle_make_model }}</p>
+                                        <p>Year of Manufacture: {{ application.year_of_manufacture }}</p>
+                                        <p>Registration Number: {{ application.registration_number }}</p>
+                                        <!-- Add more fields as needed -->
+                                    </div>
+                                    <div class="column">
+                                        <h4>Verification Documents</h4>
+                                        <p>Background Check: {{ application.background_check }}</p>
+                                        <p>Signature: {{ application.signature }}</p>
+                                        <p>Vehicle Photo: <img src="{{ application.vehicle_photo.url }}" alt="Vehicle Photo" width="50"></p>
+                                        <p>Insurance Proof: <a href="{{ application.insurance_proof.url }}" target="_blank">View Insurance</a></p>
+                                    </div>
+                                    <div class="row">
+                                        <form action="{% url 'approve_driver' application.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="approve-btn">Approve</button>
+                                        </form>
+                                        <button class="decline-btn" onclick="declineDriver('{{ application.id }}')">Decline</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section id="approved-drivers" class="dashboard-section" style="display: none;">
+            <h2>Approved Drivers</h2>
+            <div class="table-like-section">
+                <ul>
+                    {% for driver in approved_drivers %}
+                        <li>
+                            <button class="collapsible">{{ driver.full_name }}</button>
+                            <div class="content">
+                                <div class="row">
+                                    <div class="column">
+                                        <h4>Driver Information</h4>
+                                        <p>Full Name: {{ driver.full_name }}</p>
+                                        <p>Phone: {{ driver.phone }}</p>
+                                        <p>Email: {{ driver.email }}</p>
+                                        <p>Vehicle Make/Model: {{ driver.vehicle_make_model }}</p>
+                                        <p>Registration Number: {{ driver.registration_number }}</p>
+                                        <p>Vehicle Photo: <img src="{{ driver.vehicle_photo.url }}" alt="Vehicle Photo" width="50"></p>   
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section id="reports-analytics" class="dashboard-section" style="display: none;">
+            <h2>Reports & Analytics</h2>
+            <div class="table-like-section">
+                <!-- Reports and analytics content -->
+            </div>
+        </section>
+    </div>
+    <script>
+        function showContent(sectionId) {
+            // Hide all content sections
+            var sections = document.querySelectorAll('.dashboard-section');
+            sections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+
+            // Show the selected content section
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        function toggleDropdown(event) {
+            event.preventDefault();
+            var dropdown = event.target.nextElementSibling;
+            dropdown.classList.toggle('show');
+        }
+
+        function declineDriver(driverId) {
+            // Implement the decline driver logic here
+        }
+    </script>
+</body>
+</html>
