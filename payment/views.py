@@ -1,39 +1,60 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
+import requests
+from requests.auth import HTTPBasicAuth
 import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django_daraja.mpesa.core import MpesaClient
+from . credentials import MpesaAccessToken, LipanaMpesaPpassword
 
-@csrf_exempt
-def mpesa_stk_push(request):
-    if request.method == 'POST':
-        phone_number = request.POST.get('booking_email_or_phone')
-        mpesa_client = MpesaClient()
-        callback_url = 'https://e22e-154-159-237-48.ngrok-free.app'  
-        response = mpesa_client.stk_push(phone_number, 1, 'NextGen Payment', 'Payment for booking', callback_url)
-        return JsonResponse(response)
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-@csrf_exempt
-def mpesa_confirmation(request):
-    if request.method == 'POST':
-        mpesa_body = request.body.decode('utf-8')
-        mpesa_payment = json.loads(mpesa_body)
-        print(mpesa_payment)  
-
-        return JsonResponse({'ResultCode': 0, 'ResultDesc': 'Accepted'})
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 
-@csrf_exempt
-def mpesa_validation(request):
-    if request.method == 'POST':
-        # Parse incoming JSON data from M-Pesa
-        data = json.loads(request.body.decode('utf-8'))
-        response = {
-            "ResultCode": 0,
-            "ResultDesc": "Validation request received successfully"
+
+def home(request):
+    return render(request, 'home.html', {'navbar':'home'})
+
+
+def token(request):
+    consumer_key = '77bgGpmlOxlgJu6oEXhEgUgnu0j2WYxA'
+    consumer_secret = 'viM8ejHgtEmtPTHd'
+    api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+
+    r = requests.get(api_URL, auth=HTTPBasicAuth(
+        consumer_key, consumer_secret))
+    mpesa_access_token = json.loads(r.text)
+    validated_mpesa_access_token = mpesa_access_token["access_token"]
+
+    return render(request, 'token.html', {"token":validated_mpesa_access_token})
+
+
+
+def pay(request):
+    if request.method =="POST":
+        phone = request.POST['phone']
+        amount = request.POST['amount']
+        access_token = MpesaAccessToken.validated_mpesa_access_token
+        api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+        headers = {"Authorization": "Bearer %s" % access_token}
+        request = {
+            "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
+            "Password": LipanaMpesaPpassword.decode_password,
+            "Timestamp": LipanaMpesaPpassword.lipa_time,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": LipanaMpesaPpassword.Business_short_code,
+            "PhoneNumber": phone,
+            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+            "AccountReference": "Erick were",
+            "TransactionDesc": "Web Development Charges"
         }
-        return HttpResponse(json.dumps(response), content_type='application/json')
 
-    return HttpResponse(status=405)  
+        
+
+
+
+    response = requests.post(api_url, json=request, headers=headers)
+    return HttpResponse("success")
+
+
+def stk(request):
+    return render(request, 'pay.html', {'navbar':'stk'})
